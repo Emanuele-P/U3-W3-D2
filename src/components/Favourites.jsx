@@ -1,10 +1,18 @@
 import { Col, Container, Row } from 'react-bootstrap'
-import { useSelector } from 'react-redux' // Import useDispatch
+import { useDispatch, useSelector } from 'react-redux' // Import useDispatch
 import Job from './Job'
 import { Link } from 'react-router-dom'
+import { hideButtons, showButton } from '../redux/actions'
+import { useEffect } from 'react'
 
 const Favourites = () => {
-  const favourites = useSelector((state) => state.favouriteJob.content)
+  const favourites = useSelector((state) => state.favourites.content)
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(hideButtons())
+    return () => dispatch(showButton())
+  }, [dispatch])
 
   return (
     <Container>
@@ -16,7 +24,7 @@ const Favourites = () => {
           </Link>
           {favourites.map((jobData) => (
             <div key={jobData._id}>
-              <Job data={jobData} key={jobData._id} showRemove={true} />
+              <Job data={jobData} key={jobData._id} />
             </div>
           ))}
         </Col>
